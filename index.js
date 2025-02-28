@@ -8,15 +8,10 @@ app.use(express.json());
 app.use(cors());
 
 const transporter = nodemailer.createTransport({
-  host: process.env.SMTP_HOST,
-  port: process.env.SMTP_PORT,
-  secure: true, // Use true para 465 (SSL) ou false para 587 (TLS)
+  service: 'gmail',
   auth: {
-    user: process.env.SMTP_USER,
-    pass: process.env.SMTP_PASS,
-  },
-  tls: {
-    rejectUnauthorized: false, // Evita erro de certificado SSL
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASSWORD,
   },
 });
 
@@ -31,10 +26,18 @@ app.post("/enviar-email", async (req, res) => {
     return res.status(400).json({ error: "Todos os campos são obrigatórios!" });
   }
 
+  const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+      user: process.env.EMAIL_USER,
+      pass: process.env.EMAIL_PASSWORD,
+    },
+  });
+
   try {
     const info = await transporter.sendMail({
       from: `"${nome}" <${email}>`,
-      to: "cafementoria51@gmail.com", // Troque pelo email que receberá as mensagens
+      to: "cetmacetma7@gmail.com", // E-mail que receberá as mensagens
       subject: "Nova mensagem do formulário",
       text: `Nome: ${nome}\nE-mail: ${email}\nWhatsApp: ${whatsapp}\n\nMensagem: ${mensagem}`,
     });
